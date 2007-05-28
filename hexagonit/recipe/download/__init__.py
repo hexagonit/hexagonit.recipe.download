@@ -84,9 +84,9 @@ class Recipe:
         # Step 2: Extract the package
         extract_dir = tempfile.mkdtemp("buildout-" + self.name)
         is_ext = download_filename.endswith
-        if is_ext('.tar.gz') or is_ext('.tgz'):
+        if is_ext('tar.gz') or is_ext('.tgz'):
             call = ['tar', 'xzf', download_filename, '-C', extract_dir]
-        elif is_ext('.tar.bz2') or is_ext('.tbz2'):
+        elif is_ext('tar.bz2') or is_ext('.tbz2'):
             call = ['tar', 'xjf', download_filename, '-C', extract_dir]
         elif is_ext('.zip'):
             call = ['unzip', download_filename, '-d', extract_dir]
