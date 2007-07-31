@@ -224,10 +224,10 @@ proceed.
     - README.txt
     d src
 
-    Also note that when the recipe is uninstalled the ignored targets
-will not be removed as they are not part of the output of this
-recipe. We can verify this by running the buildout again with a
-different destination.
+Also note that when the recipe is uninstalled the ignored targets will
+not be removed as they are not part of the output of this recipe. We
+can verify this by running the buildout again with a different
+destination.
 
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
