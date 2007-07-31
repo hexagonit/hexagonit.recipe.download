@@ -1,5 +1,5 @@
-Downloading and extracting packages
-===================================
+Supported options
+=================
 
 The ``hexagonit.recipe.download`` recipe can be used to download and
 extract packages from the net. It supports the following options:
@@ -48,6 +48,9 @@ before downloading it from the net. Files can be shared among
 different buildouts by setting the ``download-directory`` to the same
 location.
 
+Simple example
+==============
+
     >>> import os.path
     >>> testdata = join(os.path.dirname(__file__), 'testdata')
     >>> server = start_server(testdata)
@@ -69,8 +72,8 @@ Ok, let's run the buildout:
 
     >>> print system(buildout)
     Installing package1.
-    package1: Creating download directory: .../sample-buildout/downloads
-    package1: Extracting package to .../sample-buildout/parts/package1
+    package1: Creating download directory: /sample-buildout/downloads
+    package1: Extracting package to /sample-buildout/parts/package1
 
 First of all, the recipe downloaded the package for us and placed it
 in the downloads directory.
@@ -96,7 +99,10 @@ The package contained a single top level directory. Let's peek what's inside.
     - README.txt
     d src
 
-The downloaded package can be verified against a MD5 checksum. This will
+MD5 checksums
+=============
+
+The downloaded package can be verified against an MD5 checksum. This will
 make it easier to spot problems if the file has been changed.
 
     >>> write(sample_buildout, 'buildout.cfg',
@@ -122,6 +128,10 @@ Ok, let's rerun the buildout.
 You will notice that the MD5 checksum was correct. Also rerunning the
 buildout used the previously downloaded file from the ``downloads``
 directory instead downloading it again from the net.
+
+
+Controlling the extraction process
+==================================
 
 We can also extract the archive to any arbitrary location and have the
 top level directory be stripped, which is often a useful feature.
@@ -156,6 +166,10 @@ top-level directory has been stripped.
     - CHANGES.txt
     - README.txt
     d src
+
+
+Partial extraction over existing content
+========================================
 
 By default, the recipe will fail if the destination where the package
 will be extracted already contains files or directories also included
@@ -255,6 +269,10 @@ the files are gone.
 
     >>> ls(container)
     d src
+
+
+Offline mode
+============
 
 If the buildout is run in offline mode the recipe will still work if
 the package is cached in the downloads directory. Otherwise the user
