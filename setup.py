@@ -1,31 +1,46 @@
 from setuptools import setup, find_packages
-import sys, os
+import os
 
-version = '0.1'
+version = '1.0.0'
+name = 'hexagonit.recipe.download'
 
-setup(name='hexagonit.recipe.download',
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+setup(name=name,
       version=version,
-      description="zc.buildout download recipe",
-      long_description="""\
-""",
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      description="zc.buildout recipe for downloading and extracting packages",
+      long_description= (
+        read('README.txt')
+        + '\n' +
+        read('CHANGES.txt')
+        + '\n' +
+        'Detailed Documentation\n'
+        '**********************\n'
+        + '\n' +
+        read('hexagonit','recipe','download','README.txt')
+        + '\n' +
+        'Download\n'
+        '***********************\n'
+        ),
       classifiers=[
-        "Framework :: Plone",
-        "Framework :: Zope2",
-        "Framework :: Zope3",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+       'Framework :: Buildout',
+       'Intended Audience :: Developers',
+       'License :: OSI Approved :: GNU General Public License (GPL)',
+       'Topic :: Software Development :: Build Tools',
+       'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-      keywords='',
+      keywords='development buildout recipe',
       author='Kai Lautaportti',
       author_email='kai.lautaportti@hexagonit.fi',
-      url='',
+      url='http://cheeseshop.python.org/pypi/%s' % name,
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['hexagonit', 'hexagonit.recipe'],
       include_package_data=True,
       zip_safe=False,
       install_requires = ['zc.buildout', 'setuptools'],
-      dependency_links = ['http://download.zope.org/distribution/'],
+      tests_require = ['zope.testing'],
+      test_suite = '%s.tests.test_suite' % name,
       entry_points = { 'zc.buildout' : ['default = hexagonit.recipe.download:Recipe'] },
       )
