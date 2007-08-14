@@ -29,6 +29,7 @@ class Recipe:
         options.setdefault('destination', os.path.join(
                 buildout['buildout']['parts-directory'],
                 self.name))
+        options['location'] = options['destination']
         options.setdefault('strip-top-level-dir', 'false')
         options.setdefault('ignore-existing', 'false')
         options.setdefault('md5sum', '')
