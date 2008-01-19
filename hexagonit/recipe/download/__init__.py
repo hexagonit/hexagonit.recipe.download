@@ -10,6 +10,8 @@ import zc.buildout
 import logging
 
 
+TRUE_VALUES = ('yes', 'true', '1', 'on')
+
 class Recipe:
     """Recipe for downloading packages from the net and extracting them on
     the filesystem.
@@ -33,6 +35,7 @@ class Recipe:
         options.setdefault('strip-top-level-dir', 'false')
         options.setdefault('ignore-existing', 'false')
         options.setdefault('md5sum', '')
+        options.setdefault('download-only', 'false')
 
         try:
             _, _, urlpath, _, _, _ = urlparse.urlparse(options['url'])
@@ -66,6 +69,13 @@ class Recipe:
         else:
             log.info('Using a cached copy from %s' % download_filename)
 
+        parts = []
+
+        # Create destination directory
+        if not os.path.isdir(destination):
+            os.mkdir(destination)
+            parts.append(destination)
+
         # Verify file contents
         if self.options['md5sum'].strip():
             if compute_md5sum(download_filename) != self.options['md5sum'].strip():
@@ -73,52 +83,55 @@ class Recipe:
                 raise zc.buildout.UserError('MD5 checksum error')
             log.info('MD5 checksum OK')
 
-        # Extract the package
-        extract_dir = tempfile.mkdtemp("buildout-" + self.name)
-        try:
-            setuptools.archive_util.unpack_archive(download_filename, extract_dir)
-        except setuptools.archive_util.UnrecognizedFormat:
-            log.error('Unable to extract the package %s. Unknown format.' % download_filename)
-            raise zc.buildout.UserError('Package extraction error')
-
-        # Move the contents of the package in to the correct destination
-        top_level_contents = os.listdir(extract_dir)
-        if self.options['strip-top-level-dir'].lower() in ('yes', 'true', '1', 'on'):
-            if len(top_level_contents) != 1:
-                log.error('Unable to strip top level directory because there are more '
-                          'than one element in the root of the package.')
-                raise zc.buildout.UserError('Invalid package contents')
-            base = os.path.join(extract_dir, top_level_contents[0])
+        if self.options['download-only'].strip().lower() in TRUE_VALUES:
+            # Simply copy the file to destination without extraction
+            shutil.copy(download_filename, destination)
+            if not destination in parts:
+                parts.append(os.path.join(destination, self.filename))
         else:
-            base = extract_dir
+            # Extract the package
+            extract_dir = tempfile.mkdtemp("buildout-" + self.name)
+            try:
+                setuptools.archive_util.unpack_archive(download_filename, extract_dir)
+            except setuptools.archive_util.UnrecognizedFormat:
+                log.error('Unable to extract the package %s. Unknown format.' % download_filename)
+                raise zc.buildout.UserError('Package extraction error')
 
-        parts = []
-
-        if not os.path.isdir(destination):
-            os.mkdir(destination)
-            parts.append(destination)
-        log.info('Extracting package to %s' % destination)
-
-        ignore_existing = self.options['ignore-existing'].lower() in ('yes', 'true', '1', 'on')
-        for filename in os.listdir(base):
-            dest = os.path.join(destination, filename)
-            if os.path.exists(dest):
-                if ignore_existing:
-                    log.info('Ignoring existing target: %s' % dest)
-                else:
-                    log.error('Target %s already exists. Either remove it or set '
-                              '``ignore-existing = true`` in your buildout.cfg to ignore existing '
-                              'files and directories.' % dest)
-                    raise zc.buildout.UserError('File or directory already exists.')
+            # Move the contents of the package in to the correct destination
+            top_level_contents = os.listdir(extract_dir)
+            if self.options['strip-top-level-dir'].lower() in TRUE_VALUES:
+                if len(top_level_contents) != 1:
+                    log.error('Unable to strip top level directory because there are more '
+                              'than one element in the root of the package.')
+                    raise zc.buildout.UserError('Invalid package contents')
+                base = os.path.join(extract_dir, top_level_contents[0])
             else:
-                # Only add the file/directory to the list of installed
-                # parts if it does not already exist. This way it does
-                # not get accidentally removed when uninstalling.
-                parts.append(dest)
-            
-            shutil.move(os.path.join(base, filename), dest)
+                base = extract_dir
 
-        shutil.rmtree(extract_dir)
+            log.info('Extracting package to %s' % destination)
+
+            ignore_existing = self.options['ignore-existing'].lower() in TRUE_VALUES
+            for filename in os.listdir(base):
+                dest = os.path.join(destination, filename)
+                if os.path.exists(dest):
+                    if ignore_existing:
+                        log.info('Ignoring existing target: %s' % dest)
+                    else:
+                        log.error('Target %s already exists. Either remove it or set '
+                                  '``ignore-existing = true`` in your buildout.cfg to ignore existing '
+                                  'files and directories.' % dest)
+                        raise zc.buildout.UserError('File or directory already exists.')
+                else:
+                    # Only add the file/directory to the list of installed
+                    # parts if it does not already exist. This way it does
+                    # not get accidentally removed when uninstalling.
+                    parts.append(dest)
+
+                shutil.move(os.path.join(base, filename), dest)
+
+            shutil.rmtree(extract_dir)
+
+
         return parts
 
 

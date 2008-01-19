@@ -37,6 +37,12 @@ destination
     ``buildout['parts-directory']`` with the name of the section using
     the recipe.
 
+download-only
+    When set to 'true', the recipe downloads the file without trying
+    to extract it. This is useful for downloading non-tarball
+    files. The ``strip-top-level-dir`` option will be ignored if this
+    option is enabled. Defaults to ``false``.
+
 Additionally, the recipe honors the ``download-directory`` option set
 in the ``[buildout]`` section and stores the downloaded files under
 it. If the value is not set a directory called ``downloads`` will be
@@ -326,3 +332,36 @@ When we remove the file from the filesystem the recipe will not work.
     While:
       Installing package1.
     Error: Download error
+
+
+Downloading arbitrary files
+===========================
+
+We can download any file when setting the ``download-only`` option to
+``true``. This will simply place the file in the ``destination``
+directory.
+
+    >>> downloads = tmpdir('downloads')
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... parts = package
+    ...
+    ... [package]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... destination = %(dest)s
+    ... download-only = true
+    ... """ % dict(server=server, dest=downloads))
+
+    >>> print system(buildout)
+    Installing package.
+    package: MD5 checksum OK
+
+Looking into the destination directory we can see that the file was
+downloaded but not extracted. Using the ``download-only`` option will
+work for any file regardless of the type.
+
+    >>> ls(downloads)
+    -  package1-1.2.3-final.tar.gz

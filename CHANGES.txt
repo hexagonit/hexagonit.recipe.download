@@ -1,6 +1,12 @@
 Change History
 **************
 
+1.1.0 (2008-01-19)
+==================
+
+ - Added the ``download-only`` option to allow downloading arbitrary
+   files.
+
 1.0.1 (2007-08-14)
 ==================
 
