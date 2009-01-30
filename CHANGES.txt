@@ -1,6 +1,11 @@
 Change History
 **************
 
+1.1.1 (xxxx-xx-xx)
+
+ - Replaced occurrences of ``download-directory`` with ``download-cache``.
+   [dokai]
+
 1.1.0 (2008-01-19)
 ==================
 
@@ -10,7 +15,7 @@ Change History
 1.0.1 (2007-08-14)
 ==================
 
- - For consistency with other similar recipies, the recipe now sets a
+ - For consistency with other similar recipes, the recipe now sets a
    ``location`` option which may be read by other sections to learn
    where the package was extracted. This is an alias for the
    ``destination`` option.
