@@ -25,7 +25,7 @@ class Recipe:
         log = logging.getLogger(self.name)
 
         buildout['buildout'].setdefault(
-            'download-directory',
+            'download-cache',
             os.path.join(buildout['buildout']['directory'], 'downloads'))
 
         options.setdefault('destination', os.path.join(
@@ -49,7 +49,7 @@ class Recipe:
 
     def install(self):
         log = logging.getLogger(self.name)
-        download_dir = self.buildout['buildout']['download-directory']
+        download_dir = self.buildout['buildout']['download-cache']
         destination = self.options.get('destination')
 
 
