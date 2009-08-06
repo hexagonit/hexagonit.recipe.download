@@ -1,7 +1,7 @@
 Change History
 **************
 
-1.1.1 (xxxx-xx-xx)
+1.1.1 (2009-08-06)
 
  - Replaced occurrences of ``download-directory`` with ``download-cache``.
    [dokai]
