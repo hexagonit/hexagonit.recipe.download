@@ -4,6 +4,10 @@ Change History
 1.2.2 (2009-08-17)
 ==================
 
+ - Merged the current trunk (revision 79982) from the Plone Collective
+   Subversion repository. The collective repository is now abandoned and the
+   Github repository is the canonical one. [dokai]
+
  - Open files in binary mode when calculating MD5 checksums. This fixes a
    bug with checksums on the Windows platform. Bug report and patch thanks to
    Alexander Ivanov. [dokai]
