@@ -43,15 +43,15 @@ download-only
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
-Additionally, the recipe honors the ``download-directory`` option set
+Additionally, the recipe honors the ``download-cache`` option set
 in the ``[buildout]`` section and stores the downloaded files under
 it. If the value is not set a directory called ``downloads`` will be
-created in the root of the buildout and the ``download-directory``
+created in the root of the buildout and the ``download-cache``
 option set accordingly.
 
 The recipe will first check if there is a local copy of the package
 before downloading it from the net. Files can be shared among
-different buildouts by setting the ``download-directory`` to the same
+different buildouts by setting the ``download-cache`` to the same
 location.
 
 Simple example
@@ -82,7 +82,9 @@ Ok, let's run the buildout:
     package1: Extracting package to /sample-buildout/parts/package1
 
 First of all, the recipe downloaded the package for us and placed it
-in the downloads directory.
+in the downloads directory, which is located within the buildout
+directory by default. Use the ``download-cache`` option to override
+it.
 
     >>> ls(sample_buildout, 'downloads')
     - package1-1.2.3-final.tar.gz
@@ -105,6 +107,49 @@ The package contained a single top level directory. Let's peek what's inside.
     - README.txt
     d src
 
+
+Sharing packages between buildouts
+==================================
+
+Using the ``download-cache`` option in the buildout allows you to
+store the downloaded packages in central location on your
+filesystem. Using the the same location for the ``download-cache`` in
+multiple buildouts will effectively share the packages between them
+and reduce the network traffic and storage requirements.
+
+Let's create a directory to be used as the download cache.
+
+    >>> cache = tmpdir('cache')
+
+And create a new buildout that sets the ``buildout-cache`` option
+accordingly.
+
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... parts = sharedpackage
+    ... download-cache = %(cache)s
+    ...
+    ... [sharedpackage]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... """ % dict(cache=cache, server=server))
+
+Ok, let's run the buildout:
+
+    >>> print system(buildout)
+    Uninstalling package1.
+    Installing sharedpackage.
+    sharedpackage: Extracting package to /sample-buildout/parts/sharedpackage
+
+We can see that the package was placed under the shared container
+instead of the default location under the buildout directory.
+
+    >>> ls(cache)
+    d dist
+    - package1-1.2.3-final.tar.gz
+
+
 MD5 checksums
 =============
 
@@ -125,7 +170,7 @@ make it easier to spot problems if the file has been changed.
 Ok, let's rerun the buildout.
 
     >>> print system(buildout)
-    Uninstalling package1.
+    Uninstalling sharedpackage.
     Installing package1.
     package1: Using a cached copy from /sample-buildout/downloads/package1-1.2.3-final.tar.gz
     package1: MD5 checksum OK

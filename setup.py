@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1.0'
+version = '1.2.1'
 name = 'hexagonit.recipe.download'
 
 def read(*rnames):
@@ -20,21 +20,26 @@ setup(name=name,
         + '\n' +
         read('hexagonit','recipe','download','README.txt')
         + '\n' +
+        'Contributors\n' 
+        '***********************\n'
+        + '\n' +
+        read('CONTRIBUTORS.txt')
+        + '\n' +
         'Download\n'
         '***********************\n'
         ),
       classifiers=[
        'Framework :: Buildout',
        'Intended Audience :: Developers',
-       'License :: OSI Approved :: GNU General Public License (GPL)',
+       'License :: OSI Approved :: Zope Public License',
        'Topic :: Software Development :: Build Tools',
        'Topic :: Software Development :: Libraries :: Python Modules',
         ],
       keywords='development buildout recipe',
       author='Kai Lautaportti',
       author_email='kai.lautaportti@hexagonit.fi',
-      url='http://cheeseshop.python.org/pypi/%s' % name,
-      license='GPL',
+      url='http://pypi.python.org/pypi/%s' % name,
+      license='ZPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['hexagonit', 'hexagonit.recipe'],
       include_package_data=True,

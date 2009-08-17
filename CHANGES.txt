@@ -1,16 +1,36 @@
 Change History
 **************
 
-1.1.0 (2008-01-19)
+1.2.1 (2008-04-13)
 ==================
 
- - Added the ``download-only`` option to allow downloading arbitrary
-   files.
+ - Rename the buildout ``download-directory`` option to ``download-cache``
+   (which is the name used by buildout) [thefunny]
+
+ - Added BBB support for the ``download-directory`` option. It will
+   emit a deprecation warning and set the ``download-cache`` option
+   accordingly. [dokai]
+
+1.2.0 (2008-01-19)
+==================
+
+ - Added the `download-only` option to allow downloading arbitrary
+   files. [dokai]
+
+1.1.0 (2007-10-14)
+==================
+
+ - Refactored the install method so recipe subclasses can override the base
+   directory. For more info see ``calculate_base`` method on ``Recipe`` class.
+   [hexsprite]
+
+ - Recipe is now a new-style Python class so recipe subclasses can use super()
+   method to get some default behavior. [hexsprite]
 
 1.0.1 (2007-08-14)
 ==================
 
- - For consistency with other similar recipies, the recipe now sets a
+ - For consistency with other similar recipes, the recipe now sets a
    ``location`` option which may be read by other sections to learn
    where the package was extracted. This is an alias for the
    ``destination`` option.

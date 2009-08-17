@@ -9,10 +9,9 @@ import setuptools.archive_util
 import zc.buildout
 import logging
 
-
 TRUE_VALUES = ('yes', 'true', '1', 'on')
 
-class Recipe:
+class Recipe(object):
     """Recipe for downloading packages from the net and extracting them on
     the filesystem.
     """
@@ -23,10 +22,18 @@ class Recipe:
         self.name = name
 
         log = logging.getLogger(self.name)
-
-        buildout['buildout'].setdefault(
-            'download-directory',
-            os.path.join(buildout['buildout']['directory'], 'downloads'))
+        
+        # BBB: Support download-directory for now, we can get rid of it in 1.3
+        if 'download-directory' in buildout['buildout']:
+            log.warn('The "download-directory" option in the [buildout] section '
+                     'is deprecated, use "download-cache" instead.')
+            buildout['buildout'].setdefault(
+                'download-cache',
+                buildout['buildout']['download-directory'])
+        else:
+            buildout['buildout'].setdefault(
+                'download-cache',
+                os.path.join(buildout['buildout']['directory'], 'downloads'))
 
         options.setdefault('destination', os.path.join(
                 buildout['buildout']['parts-directory'],
@@ -35,7 +42,7 @@ class Recipe:
         options.setdefault('strip-top-level-dir', 'false')
         options.setdefault('ignore-existing', 'false')
         options.setdefault('md5sum', '')
-        options.setdefault('download-only', 'false')
+        options.setdefault('download-only', 'false').strip()
 
         try:
             _, _, urlpath, _, _, _ = urlparse.urlparse(options['url'])
@@ -47,15 +54,30 @@ class Recipe:
     def update(self):
         pass
 
+    def calculate_base(self, extract_dir):
+        """
+        recipe authors inheriting from this recipe can override this method to set a different base directory.
+        """
+        # Move the contents of the package in to the correct destination
+        top_level_contents = os.listdir(extract_dir)
+        if self.options['strip-top-level-dir'].lower() in TRUE_VALUES:
+            if len(top_level_contents) != 1:
+                log.error('Unable to strip top level directory because there are more '
+                          'than one element in the root of the package.')
+                raise zc.buildout.UserError('Invalid package contents')
+            base = os.path.join(extract_dir, top_level_contents[0])
+        else:
+            base = extract_dir
+        return base
+
     def install(self):
         log = logging.getLogger(self.name)
-        download_dir = self.buildout['buildout']['download-directory']
+        download_dir = self.buildout['buildout']['download-cache']
         destination = self.options.get('destination')
-
 
         if not os.path.isdir(download_dir):
             log.info('Creating download directory: %s' % download_dir)
-            os.mkdir(download_dir)
+            os.makedirs(download_dir)
 
         # Download the file if we don't have a local copy
         download_filename = os.path.join(download_dir, self.filename)
@@ -76,6 +98,7 @@ class Recipe:
             os.mkdir(destination)
             parts.append(destination)
 
+
         # Verify file contents
         if self.options['md5sum'].strip():
             if compute_md5sum(download_filename) != self.options['md5sum'].strip():
@@ -83,12 +106,14 @@ class Recipe:
                 raise zc.buildout.UserError('MD5 checksum error')
             log.info('MD5 checksum OK')
 
-        if self.options['download-only'].strip().lower() in TRUE_VALUES:
+        download_only = self.options['download-only'].strip().lower() in TRUE_VALUES
+        if download_only:
             # Simply copy the file to destination without extraction
             shutil.copy(download_filename, destination)
             if not destination in parts:
                 parts.append(os.path.join(destination, self.filename))
         else:
+
             # Extract the package
             extract_dir = tempfile.mkdtemp("buildout-" + self.name)
             try:
@@ -97,17 +122,13 @@ class Recipe:
                 log.error('Unable to extract the package %s. Unknown format.' % download_filename)
                 raise zc.buildout.UserError('Package extraction error')
 
-            # Move the contents of the package in to the correct destination
-            top_level_contents = os.listdir(extract_dir)
-            if self.options['strip-top-level-dir'].lower() in TRUE_VALUES:
-                if len(top_level_contents) != 1:
-                    log.error('Unable to strip top level directory because there are more '
-                              'than one element in the root of the package.')
-                    raise zc.buildout.UserError('Invalid package contents')
-                base = os.path.join(extract_dir, top_level_contents[0])
-            else:
-                base = extract_dir
+            base = self.calculate_base(extract_dir)
 
+            parts = []
+
+            if not os.path.isdir(destination):
+                os.mkdir(destination)
+                parts.append(destination)
             log.info('Extracting package to %s' % destination)
 
             ignore_existing = self.options['ignore-existing'].lower() in TRUE_VALUES
@@ -130,8 +151,6 @@ class Recipe:
                 shutil.move(os.path.join(base, filename), dest)
 
             shutil.rmtree(extract_dir)
-
-
         return parts
 
 
