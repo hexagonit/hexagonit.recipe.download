@@ -11,7 +11,7 @@ setup(name=name,
       version=version,
       description="zc.buildout recipe for downloading and extracting packages",
       long_description= (
-        read('README.txt')
+        read('README.rst')
         + '\n' +
         read('CHANGES.txt')
         + '\n' +
