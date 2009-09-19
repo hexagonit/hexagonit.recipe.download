@@ -43,11 +43,11 @@ extract packages from the net. It supports the following options:
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
-The recipe uses the zc.buildout ``Download API``_ to perform the
+The recipe uses the zc.buildout `Download API`_ to perform the
 actual download which allows additional configuration of the download
 process.
 
-By default the recipe sets the ``download-cache`` option to to
+By default, the recipe sets the ``download-cache`` option to
 ``${buildout:directory}/downloads`` and creates the directory if
 necessary. This can be overridden by providing the ``download-cache``
 option in your ``[buildout]`` section.
