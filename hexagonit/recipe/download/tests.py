@@ -1,6 +1,7 @@
+import re
 import unittest
-import zc.buildout.tests
 import zc.buildout.testing
+import zc.buildout.tests
 
 from zope.testing import doctest, renormalizing
 
@@ -21,6 +22,7 @@ def test_suite():
                 optionflags=optionflags,
                 checker=renormalizing.RENormalizing([
                         zc.buildout.testing.normalize_path,
+                        (re.compile(r'http://localhost:\d+'), 'http://test.server'),
                         ]),
                 ),
             ))
