@@ -68,6 +68,7 @@ extracted in the parts directory.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -120,6 +121,7 @@ accordingly.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = sharedpackage
     ... download-cache = %(cache)s
     ...
@@ -155,6 +157,7 @@ If the checksum fails we get an error.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -175,6 +178,7 @@ Using a valid checksum allows the recipe to proceed.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -198,6 +202,7 @@ top level directory be stripped, which is often a useful feature.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -237,6 +242,7 @@ in the package.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -269,6 +275,7 @@ proceed.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -298,6 +305,7 @@ destination.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ...
     ... [package1]
@@ -332,6 +340,7 @@ mode.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ... offline = true
     ...
@@ -358,6 +367,7 @@ When we remove the file from the filesystem the recipe will not work.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package1
     ... offline = true
     ...
@@ -386,6 +396,7 @@ directory.
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
+    ... newest = false
     ... parts = package
     ...
     ... [package]
