@@ -18,9 +18,6 @@ class Recipe(object):
         self.options = options
         self.buildout = buildout
         self.name = name
-
-        log = logging.getLogger(self.name)
-        
         buildout['buildout'].setdefault(
             'download-cache',
             os.path.join(buildout['buildout']['directory'], 'downloads'))
@@ -41,6 +38,7 @@ class Recipe(object):
         """
         recipe authors inheriting from this recipe can override this method to set a different base directory.
         """
+        log = logging.getLogger(self.name)
         # Move the contents of the package in to the correct destination
         top_level_contents = os.listdir(extract_dir)
         if self.options['strip-top-level-dir'].lower() in TRUE_VALUES:
