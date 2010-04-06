@@ -49,7 +49,7 @@ extract packages from the net. It supports the following options:
     downloaded files. See the corresponding `documentation
     <http://pypi.python.org/pypi/zc.buildout#using-a-hash-of-the-url-as-the-filename-in-the-cache>`_
     for details. Setting the parameter to ``false`` will use the original
-    filename. Defaults to ``true``.
+    filename. Defaults to ``true``. New in version 1.4.0.
 
 The recipe uses the zc.buildout `Download API`_ to perform the
 actual download which allows additional configuration of the download
