@@ -1,6 +1,15 @@
 Change History
 **************
 
+1.4.0 (2010-04-06)
+==================
+
+ - Changed the download policy to hash the downloaded filenames by default.
+   You can revert back to the original behavior by setting a ``hash-name =
+   false`` parameter in the section using the recipe. This closes
+   http://github.com/hexagonit/hexagonit.recipe.download/issues#issue/1
+   [dokai]
+
 1.3.0 (2009-09-20)
 ==================
 

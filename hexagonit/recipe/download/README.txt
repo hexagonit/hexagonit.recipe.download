@@ -43,6 +43,14 @@ extract packages from the net. It supports the following options:
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
+``hash-name``
+    When set to 'true', passes the ``hash_name=True`` keyword parameter to the
+    ``zc.buildout`` Download utility which in turn uses MD5 hashes to name the
+    downloaded files. See the corresponding `documentation
+    <http://pypi.python.org/pypi/zc.buildout#using-a-hash-of-the-url-as-the-filename-in-the-cache>`_
+    for details. Setting the parameter to ``false`` will use the original
+    filename. Defaults to ``true``.
+
 The recipe uses the zc.buildout `Download API`_ to perform the
 actual download which allows additional configuration of the download
 process.
@@ -139,11 +147,16 @@ Ok, let's run the buildout:
     sharedpackage: Extracting package to /sample-buildout/parts/sharedpackage
 
 We can see that the package was placed under the shared container
-instead of the default location under the buildout directory.
+instead of the default location under the buildout directory. By default the
+the filename of the downloaded package is hashed.
 
     >>> ls(cache)
-    d dist
-    - package1-1.2.3-final.tar.gz
+    -  dfb1e3136ba092f200be0f9c57cf62ec
+    d  dist
+
+We can keep the original filename by setting the ``hash-name`` parameter to
+``false``. For readability all the following examples will have hashing
+disabled.
 
 
 MD5 checksums
@@ -164,14 +177,16 @@ If the checksum fails we get an error.
     ... recipe = hexagonit.recipe.download
     ... url = %spackage1-1.2.3-final.tar.gz
     ... md5sum = invalid
+    ... hash-name = false
     ... """ % server)
 
     >>> print system(buildout)
     Uninstalling sharedpackage.
     Installing package1.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     While:
       Installing package1.
-    Error: MD5 checksum mismatch for cached download from 'http://test.server/package1-1.2.3-final.tar.gz' at '/sample-buildout/downloads/package1-1.2.3-final.tar.gz'    
+    Error: MD5 checksum mismatch downloading 'http://test.server/package1-1.2.3-final.tar.gz'
 
 Using a valid checksum allows the recipe to proceed.
 
@@ -185,10 +200,12 @@ Using a valid checksum allows the recipe to proceed.
     ... recipe = hexagonit.recipe.download
     ... url = %s/package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... hash-name = false
     ... """ % server)
 
     >>> print system(buildout)
     Installing package1.
+    Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
 
 
@@ -211,6 +228,7 @@ top level directory be stripped, which is often a useful feature.
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... destination = %(dest)s
     ... strip-top-level-dir = true
+    ... hash-name = false
     ... """ % dict(server=server, dest=tmpcontainer))
 
 Rerunning the buildout now gives us
@@ -251,6 +269,7 @@ in the package.
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... destination = %(dest)s
     ... strip-top-level-dir = true
+    ... hash-name = false
     ... """ % dict(server=server, dest=container))
 
 Running the buildout now will fail because of the existing ``src``
@@ -285,6 +304,7 @@ proceed.
     ... destination = %(dest)s
     ... strip-top-level-dir = true
     ... ignore-existing = true
+    ... hash-name = false
     ... """ % dict(server=server, dest=container))
 
     >>> print system(buildout)
@@ -314,6 +334,7 @@ destination.
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... strip-top-level-dir = true
     ... ignore-existing = true
+    ... hash-name = false
     ... """ % dict(server=server))
 
     >>> print system(buildout)
@@ -349,12 +370,14 @@ mode.
     ... url = %(server)s/package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... strip-top-level-dir = true
+    ... hash-name = false
     ... """ % dict(server=server))
 
 Let's verify that we do have a cached copy in our downloads directory.
 
     >>> ls(sample_buildout, 'downloads')
-    - package1-1.2.3-final.tar.gz
+    -  dfb1e3136ba092f200be0f9c57cf62ec
+    -  package1-1.2.3-final.tar.gz
 
     >>> print system(buildout)
     Uninstalling package1.
@@ -375,6 +398,7 @@ When we remove the file from the filesystem the recipe will not work.
     ... recipe = hexagonit.recipe.download
     ... url = %(server)spackage1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... hash-name = false
     ... """ % dict(server=server))
 
     >>> print system(buildout)
@@ -405,6 +429,7 @@ directory.
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... destination = %(dest)s
     ... download-only = true
+    ... hash-name = false
     ... """ % dict(server=server, dest=downloads))
 
     >>> print system(buildout)

@@ -32,6 +32,7 @@ class Recipe(object):
         options.setdefault('strip-top-level-dir', 'false')
         options.setdefault('ignore-existing', 'false')
         options.setdefault('download-only', 'false')
+        options.setdefault('hash-name', 'true')
 
     def update(self):
         pass
@@ -59,7 +60,7 @@ class Recipe(object):
             os.makedirs(self.buildout['buildout']['download-cache'])
 
         destination = self.options.get('destination')
-        download = Download(self.buildout['buildout'])
+        download = Download(self.buildout['buildout'], hash_name=self.options['hash-name'].strip() in TRUE_VALUES)
         path, is_temp = download(self.options['url'], md5sum=self.options.get('md5sum'))
 
         parts = []
