@@ -3,6 +3,7 @@ import os.path
 import setuptools.archive_util
 import shutil
 import tempfile
+import urlparse
 import zc.buildout
 
 from zc.buildout.download import Download
@@ -71,10 +72,15 @@ class Recipe(object):
 
             download_only = self.options['download-only'].strip().lower() in TRUE_VALUES
             if download_only:
+                # Use the original filename of the downloaded file regardless
+                # whether download filename hashing is enabled.
+                # See http://github.com/hexagonit/hexagonit.recipe.download/issues#issue/2
+                target_path = os.path.join(destination, os.path.basename(urlparse.urlparse(self.options['url'])[2]))
+
                 # Simply copy the file to destination without extraction
-                shutil.copy(path, destination)
+                shutil.copy(path, target_path)
                 if not destination in parts:
-                    parts.append(os.path.join(destination, os.path.basename(path)))
+                    parts.append(target_path)
             else:
                 # Extract the package
                 extract_dir = tempfile.mkdtemp("buildout-" + self.name)

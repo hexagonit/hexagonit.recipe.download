@@ -32,7 +32,7 @@ extract packages from the net. It supports the following options:
     fail.
 
 ``destination``
-    The location where the extracted contents of the package
+    Path to a directory where the extracted contents of the package
     will be placed. If omitted, a directory will be created under the
     ``buildout['parts-directory']`` with the name of the section using
     the recipe.
@@ -416,12 +416,14 @@ We can download any file when setting the ``download-only`` option to
 ``true``. This will simply place the file in the ``destination``
 directory.
 
+    >>> cache = tmpdir('download-cache')
     >>> downloads = tmpdir('downloads')
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
     ... newest = false
     ... parts = package
+    ... download-cache = %(cache)s
     ...
     ... [package]
     ... recipe = hexagonit.recipe.download
@@ -429,8 +431,7 @@ directory.
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... destination = %(dest)s
     ... download-only = true
-    ... hash-name = false
-    ... """ % dict(server=server, dest=downloads))
+    ... """ % dict(server=server, dest=downloads, cache=cache))
 
     >>> print system(buildout)
     Installing package.
@@ -442,3 +443,11 @@ work for any file regardless of the type.
 
     >>> ls(downloads)
     -  package1-1.2.3-final.tar.gz
+
+As seen above, with ``download-only`` the original filename will be preserved
+regardless whether filename hashing is in use or not. However, the cached copy
+will be hashed by default.
+
+    >>> ls(cache)
+    -  dfb1e3136ba092f200be0f9c57cf62ec
+    d  dist

@@ -1,6 +1,16 @@
 Change History
 **************
 
+1.4.1 (xxxx-xx-xx)
+==================
+
+ - Fixed the filename handling for ``download-only = true``. The filename
+   hashing introduced in 1.4.0 resulted in the names of the downloaded files
+   to be hashed also. Now the original filename is preserved regardless
+   whether filenames are hashed in the download cache. This closes
+   http://github.com/hexagonit/hexagonit.recipe.download/issues#issue/2
+   [dokai]
+
 1.4.0 (2010-04-06)
 ==================
 
