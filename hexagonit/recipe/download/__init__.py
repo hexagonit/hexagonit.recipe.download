@@ -31,6 +31,7 @@ class Recipe(object):
         options.setdefault('ignore-existing', 'false')
         options.setdefault('download-only', 'false')
         options.setdefault('hash-name', 'true')
+        options['filename'] = options.get('filename', '').strip()
 
     def update(self):
         pass
@@ -72,12 +73,17 @@ class Recipe(object):
 
             download_only = self.options['download-only'].strip().lower() in TRUE_VALUES
             if download_only:
-                # Use the original filename of the downloaded file regardless
-                # whether download filename hashing is enabled.
-                # See http://github.com/hexagonit/hexagonit.recipe.download/issues#issue/2
-                target_path = os.path.join(destination, os.path.basename(urlparse.urlparse(self.options['url'])[2]))
+                if self.options['filename']:
+                    # Use an explicit filename from the section configuration
+                    filename = self.options['filename']
+                else:
+                    # Use the original filename of the downloaded file regardless
+                    # whether download filename hashing is enabled.
+                    # See http://github.com/hexagonit/hexagonit.recipe.download/issues#issue/2
+                    filename = os.path.basename(urlparse.urlparse(self.options['url'])[2])
 
-                # Simply copy the file to destination without extraction
+                # Copy the file to destination without extraction
+                target_path = os.path.join(destination, filename)
                 shutil.copy(path, target_path)
                 if not destination in parts:
                     parts.append(target_path)

@@ -43,6 +43,13 @@ extract packages from the net. It supports the following options:
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
+``filename``
+    Allows renaming the downloaded file when using ``download-only = true``.
+    The downloaded file will still be placed under the ``destination``
+    directory with the given filename. If ``download-only = false`` this
+    option will be ignored. By default the original filename will be used. New
+    in version 1.4.1.
+
 ``hash-name``
     When set to 'true', passes the ``hash_name=True`` keyword parameter to the
     ``zc.buildout`` Download utility which in turn uses MD5 hashes to name the
@@ -109,6 +116,7 @@ The package contained a single top level directory. Let's peek what's inside.
     - README.txt
     d src
 
+    >>> rmdir('downloads')
 
 Sharing packages between buildouts
 ==================================
@@ -376,7 +384,6 @@ mode.
 Let's verify that we do have a cached copy in our downloads directory.
 
     >>> ls(sample_buildout, 'downloads')
-    -  dfb1e3136ba092f200be0f9c57cf62ec
     -  package1-1.2.3-final.tar.gz
 
     >>> print system(buildout)
@@ -416,8 +423,8 @@ We can download any file when setting the ``download-only`` option to
 ``true``. This will simply place the file in the ``destination``
 directory.
 
-    >>> cache = tmpdir('download-cache')
-    >>> downloads = tmpdir('downloads')
+    >>> empty_download_cache(cache)
+    >>> downloads = tmpdir('my-downloads')
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
@@ -451,3 +458,64 @@ will be hashed by default.
     >>> ls(cache)
     -  dfb1e3136ba092f200be0f9c57cf62ec
     d  dist
+
+The downloaded files may also be renamed to better reflect their purpose using
+the ``filename`` parameter.
+
+    >>> empty_download_cache(cache)
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... newest = false
+    ... parts = package
+    ... download-cache = %(cache)s
+    ...
+    ... [package]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... destination = %(dest)s
+    ... download-only = true
+    ... filename = renamed-package-1.2.3.tgz
+    ... """ % dict(server=server, dest=downloads, cache=cache))
+
+    >>> print system(buildout)
+    Uninstalling package.
+    Installing package.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
+
+    >>> ls(downloads)
+    -  renamed-package-1.2.3.tgz
+
+`Variable substitions
+<http://pypi.python.org/pypi/zc.buildout#variable-substitutions>`_ may be used
+with the ``filename`` parameter to generate the resulting filename dynamically.
+
+    >>> empty_download_cache(cache)
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... newest = false
+    ... parts = package
+    ... download-cache = %(cache)s
+    ... example = foobar-1.2.3
+    ...
+    ... [package]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... destination = %(dest)s
+    ... download-only = true
+    ... filename = ${:_buildout_section_name_}-${buildout:example}.tgz
+    ... """ % dict(server=server, dest=downloads, cache=cache))
+
+    >>> print system(buildout)
+    Uninstalling package.
+    Installing package.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
+
+In this example we have used the section name and a value from the [buildout]
+section to demonstrate the dynamic naming.
+
+    >>> ls(downloads)
+    -  package-foobar-1.2.3.tgz
