@@ -1,7 +1,7 @@
 Change History
 **************
 
-1.4.1 (xxxx-xx-xx)
+1.4.1 (2010-04-08)
 ==================
 
  - Implemented support for specifying the filename of a downloaded file when
