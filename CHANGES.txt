@@ -1,6 +1,12 @@
 Change History
 **************
 
+1.4.2 (xxxx-xx-xx)
+==================
+
+ - Use the stdlib ``doctest`` module instead of ``zope.testing.doctest``.
+   [dokai]
+
 1.4.1 (2010-04-08)
 ==================
 

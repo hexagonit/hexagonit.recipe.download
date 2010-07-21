@@ -1,11 +1,12 @@
+from zope.testing import renormalizing
+
+import doctest
 import os
 import re
 import shutil
 import unittest
 import zc.buildout.testing
 import zc.buildout.tests
-
-from zope.testing import doctest, renormalizing
 
 optionflags =  (doctest.ELLIPSIS |
                 doctest.NORMALIZE_WHITESPACE |
