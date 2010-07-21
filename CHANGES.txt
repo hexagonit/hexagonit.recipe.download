@@ -4,6 +4,9 @@ Change History
 1.4.2 (xxxx-xx-xx)
 ==================
 
+ - Fixed a spurious test failure because the results of ``ls()`` were
+   unpredictable due to random filename hashing. [dokai]
+
  - Use the stdlib ``doctest`` module instead of ``zope.testing.doctest``.
    [dokai]
 
