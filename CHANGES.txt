@@ -3,6 +3,8 @@ Change History
 
 1.4.2 (xxxx-xx-xx)
 ==================
+ - Reverted back to using ``zope.testing.doctest`` because on Python 2.4 the
+   ``__file__`` variable is not available using stdlib ``doctest``. [dokai]
 
  - Fixed a spurious test failure because the results of ``ls()`` were
    unpredictable due to random filename hashing. [dokai]
