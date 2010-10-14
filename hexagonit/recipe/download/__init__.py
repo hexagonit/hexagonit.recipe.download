@@ -1,3 +1,4 @@
+from fnmatch import fnmatch
 import logging
 import os.path
 import setuptools.archive_util
@@ -32,6 +33,13 @@ class Recipe(object):
         options.setdefault('download-only', 'false')
         options.setdefault('hash-name', 'true')
         options['filename'] = options.get('filename', '').strip()
+        self.excludes = [x.strip() for x in options.get('excludes', '').split(';')]
+
+    def progress_filter(self, src, dst):
+        for exclude in self.excludes:
+            if fnmatch(src, exclude):
+                return
+        return dst
 
     def update(self):
         pass
@@ -91,7 +99,7 @@ class Recipe(object):
                 # Extract the package
                 extract_dir = tempfile.mkdtemp("buildout-" + self.name)
                 try:
-                    setuptools.archive_util.unpack_archive(path, extract_dir)
+                    setuptools.archive_util.unpack_archive(path, extract_dir, progress_filter=self.progress_filter)
                 except setuptools.archive_util.UnrecognizedFormat:
                     log.error('Unable to extract the package %s. Unknown format.', path)
                     raise zc.buildout.UserError('Package extraction error')
