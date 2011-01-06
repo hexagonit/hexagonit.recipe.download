@@ -2,3 +2,4 @@
  * Jordan Baker (hexsprite) - jbb@scryent.com
  * Sylvain Viollon (thefunny)
  * Alexander Ivanov
+ * Florian Schulze (fschulze)

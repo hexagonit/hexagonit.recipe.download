@@ -58,6 +58,12 @@ extract packages from the net. It supports the following options:
     for details. Setting the parameter to ``false`` will use the original
     filename. Defaults to ``true``. New in version 1.4.0.
 
+``excludes``
+   A list of path specifications separated with semicolons to filter files and
+   directories while unpacking. Example to limit the space solr instances use:
+   ``excludes = apache-solr-*/contrib/*;apache-solr-*/docs/*``. The wildcards
+   are implemented using fnmatch.
+
 The recipe uses the zc.buildout `Download API`_ to perform the
 actual download which allows additional configuration of the download
 process.
