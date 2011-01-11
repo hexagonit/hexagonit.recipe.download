@@ -5,18 +5,21 @@ The ``hexagonit.recipe.download`` recipe can be used to download and
 extract packages from the net. It supports the following options:
 
 ``url``
+
     URL to the package that will be downloaded and extracted. The
     supported package formats are .tar.gz, .tar.bz2, and .zip. The
     value must be a full URL,
     e.g. http://python.org/ftp/python/2.4.4/Python-2.4.4.tgz.
 
 ``strip-top-level-dir``
+
     Switch to remove the top level directory from the
     extracted archive. This will work only if the archive has exactly
     one top level directory. Accepted values are 'true' or
     'false'. Defaults to 'false'.
 
 ``ignore-existing``
+
     Switch to ignore existing files and/or directories. By
     default, the extraction process fails if there is existing files
     or directories matching the ones from the archive. Enabling this
@@ -26,24 +29,28 @@ extract packages from the net. It supports the following options:
     to 'false'.
 
 ``md5sum``
+
     MD5 checksum for the package file. If available the MD5
     checksum of the downloaded package will be compared to this value
     and if the values do not match the execution of the recipe will
     fail.
 
 ``destination``
+
     Path to a directory where the extracted contents of the package
     will be placed. If omitted, a directory will be created under the
     ``buildout['parts-directory']`` with the name of the section using
     the recipe.
 
 ``download-only``
+
     When set to 'true', the recipe downloads the file without trying
     to extract it. This is useful for downloading non-tarball
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
 ``filename``
+
     Allows renaming the downloaded file when using ``download-only = true``.
     The downloaded file will still be placed under the ``destination``
     directory with the given filename. If ``download-only = false`` this
@@ -51,6 +58,7 @@ extract packages from the net. It supports the following options:
     in version 1.4.1.
 
 ``hash-name``
+
     When set to 'true', passes the ``hash_name=True`` keyword parameter to the
     ``zc.buildout`` Download utility which in turn uses MD5 hashes to name the
     downloaded files. See the corresponding `documentation
@@ -59,10 +67,11 @@ extract packages from the net. It supports the following options:
     filename. Defaults to ``true``. New in version 1.4.0.
 
 ``excludes``
+
    A list of newline separated path specifications to filter out files and
    directories while unpacking. The path specifications may contain Unix
    shell-style wildcards as implemented by the `fnmatch.fnmatch
-   <http://docs.python.org/release/2.6.6/library/fnmatch.html>` function.
+   <http://docs.python.org/release/2.6.6/library/fnmatch.html>`_ function.
 
    For example, to limit the disk usage when downloading the Solr package the
    following configuration may be used to exclude the documentation and
@@ -382,11 +391,12 @@ in case the package contains content which is not necessary.
 The ``excludes`` option allows multiple filtering definitions and supports
 Unix shell-style wildcards for matching the package contents. The matching is
 implemented using `fnmatch
-<http://docs.python.org/release/2.6.6/library/fnmatch.html`_ and done in a
-case-insensitive manner.
+<http://docs.python.org/release/2.6.6/library/fnmatch.html>`_ and done in a
+case-insensitive manner. Each filtering definition must be given on a separate
+line.
 
-In the following example we will exclude the CHANGES.txt file and everything
-under and including the src directory.
+In the following example we will exclude the *CHANGES.txt* file and everything
+under and including the *src* directory.
 
     >>> write(sample_buildout, 'buildout.cfg',
     ... """

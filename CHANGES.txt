@@ -1,8 +1,12 @@
 Change History
 **************
 
-1.4.2 (xxxx-xx-xx)
+1.5.0 (xxxx-xx-xx)
 ==================
+
+ - Implemented support for excluding paths while unpacking.
+   [fschulze]
+
  - Reverted back to using ``zope.testing.doctest`` because on Python 2.4 the
    ``__file__`` variable is not available using stdlib ``doctest``. [dokai]
 
