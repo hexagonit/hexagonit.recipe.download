@@ -172,9 +172,9 @@ We can see that the package was placed under the shared container
 instead of the default location under the buildout directory. By default the
 the filename of the downloaded package is hashed.
 
+    >>> rmdir(cache, 'dist')
     >>> ls(cache)
     -  dfb1e3136ba092f200be0f9c57cf62ec
-    d  dist
 
 We can keep the original filename by setting the ``hash-name`` parameter to
 ``false``. For readability all the following examples will have hashing
@@ -515,10 +515,6 @@ work for any file regardless of the type.
 As seen above, with ``download-only`` the original filename will be preserved
 regardless whether filename hashing is in use or not. However, the cached copy
 will be hashed by default.
-
-    >>> ls(cache)
-    -  dfb1e3136ba092f200be0f9c57cf62ec
-    d  dist
 
 The downloaded files may also be renamed to better reflect their purpose using
 the ``filename`` parameter.

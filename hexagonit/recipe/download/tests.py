@@ -1,11 +1,12 @@
+from zope.testing import doctest
+from zope.testing import renormalizing
+
 import os
 import re
 import shutil
 import unittest
 import zc.buildout.testing
 import zc.buildout.tests
-
-from zope.testing import doctest, renormalizing
 
 optionflags =  (doctest.ELLIPSIS |
                 doctest.NORMALIZE_WHITESPACE |
@@ -36,8 +37,8 @@ def test_suite():
                 checker=renormalizing.RENormalizing([
                         zc.buildout.testing.normalize_path,
                         (re.compile(r'http://localhost:\d+'), 'http://test.server'),
-                        # Use a static MD5 sum for the tests
-                        (re.compile(r'[a-f0-9]{32}'), 'dfb1e3136ba092f200be0f9c57cf62ec'),
+                        # Clean up the variable hashed filenames to avoid spurious test failures
+                        (re.compile(r'[a-f0-9]{32}'), ''),
                         ]),
                 ),
             ))
