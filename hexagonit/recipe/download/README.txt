@@ -59,10 +59,18 @@ extract packages from the net. It supports the following options:
     filename. Defaults to ``true``. New in version 1.4.0.
 
 ``excludes``
-   A list of path specifications separated with semicolons to filter files and
-   directories while unpacking. Example to limit the space solr instances use:
-   ``excludes = apache-solr-*/contrib/*;apache-solr-*/docs/*``. The wildcards
-   are implemented using fnmatch.
+   A list of newline separated path specifications to filter out files and
+   directories while unpacking. The path specifications may contain Unix
+   shell-style wildcards as implemented by the `fnmatch.fnmatch
+   <http://docs.python.org/release/2.6.6/library/fnmatch.html>` function.
+
+   For example, to limit the disk usage when downloading the Solr package the
+   following configuration may be used to exclude the documentation and
+   contrib from being unpacked::
+
+      excludes =
+        apache-solr-*/contrib/*
+        apache-solr-*/docs/*
 
 The recipe uses the zc.buildout `Download API`_ to perform the
 actual download which allows additional configuration of the download
@@ -363,6 +371,53 @@ the files are gone.
     >>> ls(container)
     d src
 
+
+Excluding package contents
+==========================
+
+It is possible to exclude selected contents of the downloaded package from
+being extracted on the filesystem. The primary use case is to save disk space
+in case the package contains content which is not necessary.
+
+The ``excludes`` option allows multiple filtering definitions and supports
+Unix shell-style wildcards for matching the package contents. The matching is
+implemented using `fnmatch
+<http://docs.python.org/release/2.6.6/library/fnmatch.html`_ and done in a
+case-insensitive manner.
+
+In the following example we will exclude the CHANGES.txt file and everything
+under the src directory.
+
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... newest = false
+    ... parts = package1
+    ...
+    ... [package1]
+    ... recipe = hexagonit.recipe.download
+    ... url = %spackage1-1.2.3-final.tar.gz
+    ... excludes =
+    ...     package1*/CHANGES.txt
+    ...     package1*/src/*
+    ... """ % server)
+
+Ok, let's run the buildout:
+
+    >>> print system(buildout)
+    Installing package1.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
+    package1: Extracting package to /sample-buildout/parts/package1
+
+    >>> ls(sample_buildout, 'parts', 'package1')
+    d package1-1.2.3-final
+
+The package contained a single top level directory. Let's peek what's inside.
+
+    >>> ls(sample_buildout, 'parts', 'package1', 'package1-1.2.3-final')
+    - CHANGES.txt
+    - README.txt
+    d src
 
 Offline mode
 ============

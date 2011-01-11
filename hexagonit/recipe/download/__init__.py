@@ -1,4 +1,6 @@
 from fnmatch import fnmatch
+from zc.buildout.download import Download
+
 import logging
 import os.path
 import setuptools.archive_util
@@ -7,7 +9,6 @@ import tempfile
 import urlparse
 import zc.buildout
 
-from zc.buildout.download import Download
 
 TRUE_VALUES = ('yes', 'true', '1', 'on')
 
@@ -33,11 +34,14 @@ class Recipe(object):
         options.setdefault('download-only', 'false')
         options.setdefault('hash-name', 'true')
         options['filename'] = options.get('filename', '').strip()
-        self.excludes = [x.strip() for x in options.get('excludes', '').split(';')]
+        self.excludes = [x.strip() for x in options.get('excludes', '').strip().splitlines() if x.strip()]
 
     def progress_filter(self, src, dst):
+        """Filter out contents from the extracted package."""
+        log = logging.getLogger(self.name)
         for exclude in self.excludes:
             if fnmatch(src, exclude):
+                log.info("Excluding: %s" % src)
                 return
         return dst
 
@@ -51,7 +55,7 @@ class Recipe(object):
         log = logging.getLogger(self.name)
         # Move the contents of the package in to the correct destination
         top_level_contents = os.listdir(extract_dir)
-        if self.options['strip-top-level-dir'].lower() in TRUE_VALUES:
+        if self.options['strip-top-level-dir'].strip().lower() in TRUE_VALUES:
             if len(top_level_contents) != 1:
                 log.error('Unable to strip top level directory because there are more '
                           'than one element in the root of the package.')
