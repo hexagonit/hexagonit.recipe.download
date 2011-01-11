@@ -41,7 +41,7 @@ class Recipe(object):
         log = logging.getLogger(self.name)
         for exclude in self.excludes:
             if fnmatch(src, exclude):
-                log.info("Excluding: %s" % src)
+                log.info("Excluding %s" % src.rstrip('/'))
                 return
         return dst
 

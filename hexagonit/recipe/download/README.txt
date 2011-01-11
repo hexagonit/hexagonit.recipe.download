@@ -386,7 +386,7 @@ implemented using `fnmatch
 case-insensitive manner.
 
 In the following example we will exclude the CHANGES.txt file and everything
-under the src directory.
+under and including the src directory.
 
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
@@ -397,27 +397,28 @@ under the src directory.
     ... [package1]
     ... recipe = hexagonit.recipe.download
     ... url = %spackage1-1.2.3-final.tar.gz
+    ... hash-name = false
     ... excludes =
-    ...     package1*/CHANGES.txt
-    ...     package1*/src/*
+    ...     package1-*/CHANGES.txt
+    ...     package1-*/src*
     ... """ % server)
 
-Ok, let's run the buildout:
+Running the buildout will show the paths that matched the configured excludes.
 
     >>> print system(buildout)
+    Uninstalling package1.
     Installing package1.
-    Downloading http://test.server/package1-1.2.3-final.tar.gz
+    package1: Excluding package1-1.2.3-final/CHANGES.txt
+    package1: Excluding package1-1.2.3-final/src
+    package1: Excluding package1-1.2.3-final/src/foo.txt
     package1: Extracting package to /sample-buildout/parts/package1
 
-    >>> ls(sample_buildout, 'parts', 'package1')
-    d package1-1.2.3-final
-
-The package contained a single top level directory. Let's peek what's inside.
+Viewing the unpacked package contents shows that the excluded paths are not
+there.
 
     >>> ls(sample_buildout, 'parts', 'package1', 'package1-1.2.3-final')
-    - CHANGES.txt
     - README.txt
-    d src
+
 
 Offline mode
 ============
