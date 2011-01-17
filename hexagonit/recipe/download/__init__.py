@@ -38,10 +38,9 @@ class Recipe(object):
 
     def progress_filter(self, src, dst):
         """Filter out contents from the extracted package."""
-        log = logging.getLogger(self.name)
         for exclude in self.excludes:
             if fnmatch(src, exclude):
-                log.info("Excluding %s" % src.rstrip('/'))
+                self.excluded_count = self.excluded_count + 1
                 return
         return dst
 
@@ -102,12 +101,14 @@ class Recipe(object):
             else:
                 # Extract the package
                 extract_dir = tempfile.mkdtemp("buildout-" + self.name)
+                self.excluded_count = 0
                 try:
                     setuptools.archive_util.unpack_archive(path, extract_dir, progress_filter=self.progress_filter)
                 except setuptools.archive_util.UnrecognizedFormat:
                     log.error('Unable to extract the package %s. Unknown format.', path)
                     raise zc.buildout.UserError('Package extraction error')
-
+                if self.excluded_count > 0:
+                    log.info("Excluding %s files matching the exclusion pattern." % self.excluded_count)
                 base = self.calculate_base(extract_dir)
 
                 if not os.path.isdir(destination):
