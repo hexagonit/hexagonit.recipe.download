@@ -34,12 +34,17 @@ class Recipe(object):
         options.setdefault('download-only', 'false')
         options.setdefault('hash-name', 'true')
         options['filename'] = options.get('filename', '').strip()
+
+        self.verbose = len(buildout['buildout'].get('verbosity', '').strip()) > 0
         self.excludes = [x.strip() for x in options.get('excludes', '').strip().splitlines() if x.strip()]
 
     def progress_filter(self, src, dst):
         """Filter out contents from the extracted package."""
+        log = logging.getLogger(self.name)
         for exclude in self.excludes:
             if fnmatch(src, exclude):
+                if self.verbose:
+                    log.info("Excluding %s" % src.rstrip('/'))
                 self.excluded_count = self.excluded_count + 1
                 return
         return dst
@@ -108,7 +113,7 @@ class Recipe(object):
                     log.error('Unable to extract the package %s. Unknown format.', path)
                     raise zc.buildout.UserError('Package extraction error')
                 if self.excluded_count > 0:
-                    log.info("Excluding %s files matching the exclusion pattern." % self.excluded_count)
+                    log.info("Excluding %s file(s) matching the exclusion pattern." % self.excluded_count)
                 base = self.calculate_base(extract_dir)
 
                 if not os.path.isdir(destination):

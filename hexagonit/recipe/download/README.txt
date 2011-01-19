@@ -413,14 +413,29 @@ under and including the *src* directory.
     ...     package1-*/src*
     ... """ % server)
 
-Running the buildout will show the paths that matched the configured excludes.
+Running the buildout will show how many files matched the configured excludes.
 
     >>> print system(buildout)
     Uninstalling package1.
     Installing package1.
+    package1: Excluding 3 file(s) matching the exclusion pattern.
+    package1: Extracting package to /sample-buildout/parts/package1
+
+Running the buildout in verbose mode will show the individual files that
+got excluded.
+
+    >>> rmdir('parts', 'package1')
+    >>> print system(buildout + ' -v')
+    Installing 'hexagonit.recipe.download'.
+    ...
+    Uninstalling package1.
+    Installing package1.
+    Searching cache at /sample-buildout/downloads/
+    Using cache file /sample-buildout/downloads/package1-1.2.3-final.tar.gz
     package1: Excluding package1-1.2.3-final/CHANGES.txt
     package1: Excluding package1-1.2.3-final/src
     package1: Excluding package1-1.2.3-final/src/foo.txt
+    package1: Excluding 3 file(s) matching the exclusion pattern.
     package1: Extracting package to /sample-buildout/parts/package1
 
 Viewing the unpacked package contents shows that the excluded paths are not
