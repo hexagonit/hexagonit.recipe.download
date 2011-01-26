@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.4.1'
+version = '1.5.0'
 name = 'hexagonit.recipe.download'
 
 def read(*rnames):
@@ -13,12 +13,12 @@ setup(name=name,
       long_description= (
         read('README.rst')
         + '\n' +
-        read('CHANGES.txt')
-        + '\n' +
         'Detailed Documentation\n'
         '**********************\n'
         + '\n' +
         read('hexagonit','recipe','download','README.txt')
+        + '\n' +
+        read('CHANGES.txt')
         + '\n' +
         'Contributors\n' 
         '***********************\n'
