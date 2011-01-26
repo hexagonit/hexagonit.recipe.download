@@ -9,8 +9,7 @@ import zc.buildout.testing
 import zc.buildout.tests
 
 optionflags =  (doctest.ELLIPSIS |
-                doctest.NORMALIZE_WHITESPACE |
-                doctest.REPORT_ONLY_FIRST_FAILURE)
+                doctest.NORMALIZE_WHITESPACE)
 
 def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)

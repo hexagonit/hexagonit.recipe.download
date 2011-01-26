@@ -35,7 +35,8 @@ class Recipe(object):
         options.setdefault('hash-name', 'true')
         options['filename'] = options.get('filename', '').strip()
 
-        self.verbose = len(buildout['buildout'].get('verbosity', '').strip()) > 0
+        # buildout -vv (or more) will trigger verbose mode
+        self.verbose = int(buildout['buildout'].get('verbosity', 0)) >= 20
         self.excludes = [x.strip() for x in options.get('excludes', '').strip().splitlines() if x.strip()]
 
     def progress_filter(self, src, dst):
@@ -44,7 +45,7 @@ class Recipe(object):
         for exclude in self.excludes:
             if fnmatch(src, exclude):
                 if self.verbose:
-                    log.info("Excluding %s" % src.rstrip('/'))
+                    log.debug("Excluding %s" % src.rstrip('/'))
                 self.excluded_count = self.excluded_count + 1
                 return
         return dst

@@ -421,14 +421,15 @@ Running the buildout will show how many files matched the configured excludes.
     package1: Excluding 3 file(s) matching the exclusion pattern.
     package1: Extracting package to /sample-buildout/parts/package1
 
-Running the buildout in verbose mode will show the individual files that
-got excluded.
+Increasing the buildout verbosity with ``-vv`` will show the individual files
+that got excluded.
 
     >>> rmdir('parts', 'package1')
-    >>> print system(buildout + ' -v')
+    >>> print system(buildout + ' -vv')
     Installing 'hexagonit.recipe.download'.
     ...
     Uninstalling package1.
+    ...
     Installing package1.
     Searching cache at /sample-buildout/downloads/
     Using cache file /sample-buildout/downloads/package1-1.2.3-final.tar.gz
