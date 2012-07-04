@@ -109,40 +109,41 @@ class Recipe(object):
                 extract_dir = tempfile.mkdtemp("buildout-" + self.name)
                 self.excluded_count = 0
                 try:
-                    setuptools.archive_util.unpack_archive(path, extract_dir, progress_filter=self.progress_filter)
-                except setuptools.archive_util.UnrecognizedFormat:
-                    log.error('Unable to extract the package %s. Unknown format.', path)
-                    raise zc.buildout.UserError('Package extraction error')
-                if self.excluded_count > 0:
-                    log.info("Excluding %s file(s) matching the exclusion pattern." % self.excluded_count)
-                base = self.calculate_base(extract_dir)
+                    try:
+                        setuptools.archive_util.unpack_archive(path, extract_dir, progress_filter=self.progress_filter)
+                    except setuptools.archive_util.UnrecognizedFormat:
+                        log.error('Unable to extract the package %s. Unknown format.', path)
+                        raise zc.buildout.UserError('Package extraction error')
+                    if self.excluded_count > 0:
+                        log.info("Excluding %s file(s) matching the exclusion pattern." % self.excluded_count)
+                    base = self.calculate_base(extract_dir)
 
-                if not os.path.isdir(destination):
-                    os.makedirs(destination)
-                    parts.append(destination)
+                    if not os.path.isdir(destination):
+                        os.makedirs(destination)
+                        parts.append(destination)
 
-                log.info('Extracting package to %s' % destination)
+                    log.info('Extracting package to %s' % destination)
 
-                ignore_existing = self.options['ignore-existing'].strip().lower() in TRUE_VALUES
-                for filename in os.listdir(base):
-                    dest = os.path.join(destination, filename)
-                    if os.path.exists(dest):
-                        if ignore_existing:
-                            log.info('Ignoring existing target: %s' % dest)
+                    ignore_existing = self.options['ignore-existing'].strip().lower() in TRUE_VALUES
+                    for filename in os.listdir(base):
+                        dest = os.path.join(destination, filename)
+                        if os.path.exists(dest):
+                            if ignore_existing:
+                                log.info('Ignoring existing target: %s' % dest)
+                            else:
+                                log.error('Target %s already exists. Either remove it or set '
+                                          '``ignore-existing = true`` in your buildout.cfg to ignore existing '
+                                          'files and directories.', dest)
+                                raise zc.buildout.UserError('File or directory already exists.')
                         else:
-                            log.error('Target %s already exists. Either remove it or set '
-                                      '``ignore-existing = true`` in your buildout.cfg to ignore existing '
-                                      'files and directories.', dest)
-                            raise zc.buildout.UserError('File or directory already exists.')
-                    else:
-                        # Only add the file/directory to the list of installed
-                        # parts if it does not already exist. This way it does
-                        # not get accidentally removed when uninstalling.
-                        parts.append(dest)
+                            # Only add the file/directory to the list of installed
+                            # parts if it does not already exist. This way it does
+                            # not get accidentally removed when uninstalling.
+                            parts.append(dest)
 
-                    shutil.move(os.path.join(base, filename), dest)
-
-                shutil.rmtree(extract_dir)
+                        shutil.move(os.path.join(base, filename), dest)
+                finally:
+                    shutil.rmtree(extract_dir)
 
         finally:
             if is_temp:
