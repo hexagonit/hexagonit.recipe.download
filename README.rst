@@ -12,4 +12,4 @@ additional features.
  * Clone URL: git://github.com/hexagonit/hexagonit.recipe.download.git
  * Issue tracker: http://github.com/hexagonit/hexagonit.recipe.download/issues
 
-.. _gocept.download: http://cheeseshop.python.org/pypi/gocept.download
+.. _gocept.download: http://pypi.python.org/pypi/gocept.download
