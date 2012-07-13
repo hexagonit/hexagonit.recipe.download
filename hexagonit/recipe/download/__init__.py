@@ -21,9 +21,6 @@ class Recipe(object):
         self.options = options
         self.buildout = buildout
         self.name = name
-        buildout['buildout'].setdefault(
-            'download-cache',
-            os.path.join(buildout['buildout']['directory'], 'downloads'))
 
         options.setdefault('destination', os.path.join(
                 buildout['buildout']['parts-directory'],
@@ -72,9 +69,6 @@ class Recipe(object):
 
     def install(self):
         log = logging.getLogger(self.name)
-
-        if not os.path.exists(self.buildout['buildout']['download-cache']):
-            os.makedirs(self.buildout['buildout']['download-cache'])
 
         destination = self.options.get('destination')
         download = Download(self.buildout['buildout'], hash_name=self.options['hash-name'].strip() in TRUE_VALUES)
