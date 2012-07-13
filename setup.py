@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.5.0'
+version = '1.5.1'
 name = 'hexagonit.recipe.download'
+
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
@@ -10,17 +11,17 @@ def read(*rnames):
 setup(name=name,
       version=version,
       description="zc.buildout recipe for downloading and extracting packages",
-      long_description= (
+      long_description=(
         read('README.rst')
         + '\n' +
         'Detailed Documentation\n'
         '**********************\n'
         + '\n' +
-        read('hexagonit','recipe','download','README.txt')
+        read('hexagonit', 'recipe', 'download', 'README.txt')
         + '\n' +
         read('CHANGES.txt')
         + '\n' +
-        'Contributors\n' 
+        'Contributors\n'
         '***********************\n'
         + '\n' +
         read('CONTRIBUTORS.txt')
@@ -44,13 +45,13 @@ setup(name=name,
       namespace_packages=['hexagonit', 'hexagonit.recipe'],
       include_package_data=True,
       zip_safe=False,
-      install_requires = [
+      install_requires=[
         'zc.buildout >= 1.4.0',
-        'setuptools',],
+        'setuptools'],
       extras_require={
-        'test' : ['zope.testing'],
+        'test': ['zope.testing'],
       },
-      tests_require = ['zope.testing'],
-      test_suite = '%s.tests.test_suite' % name,
-      entry_points = { 'zc.buildout' : ['default = hexagonit.recipe.download:Recipe'] },
+      tests_require=['zope.testing'],
+      test_suite='%s.tests.test_suite' % name,
+      entry_points={'zc.buildout': ['default = hexagonit.recipe.download:Recipe']},
       )
