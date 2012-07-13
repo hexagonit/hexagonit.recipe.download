@@ -124,6 +124,7 @@ Ok, let's run the buildout:
 Let's take a look at the buildout parts directory now.
 
     >>> ls(sample_buildout, 'parts')
+    d buildout
     d package1
 
 The containing directory is named after our part name. Within this
