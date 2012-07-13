@@ -3,3 +3,5 @@
  * Sylvain Viollon (thefunny)
  * Alexander Ivanov
  * Florian Schulze (fschulze)
+ * Cédric de Saint Martin (desaintmartin)
+ * miano
