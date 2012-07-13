@@ -1,7 +1,7 @@
 Change History
 **************
 
-1.5.1 (xxxx-xx-xx)
+1.5.1 (2012-07-13)
 ==================
 
  - Ensure that the temporary extraction directory gets deleted even if an error
