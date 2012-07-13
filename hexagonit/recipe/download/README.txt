@@ -81,16 +81,12 @@ extract packages from the net. It supports the following options:
         apache-solr-*/contrib/*
         apache-solr-*/docs/*
 
-The recipe uses the zc.buildout `Download API`_ to perform the
-actual download which allows additional configuration of the download
-process.
-
-By default, the recipe sets the ``download-cache`` option to
-``${buildout:directory}/downloads`` and creates the directory if
-necessary. This can be overridden by providing the ``download-cache``
-option in your ``[buildout]`` section.
-
-.. _`Download API`: http://pypi.python.org/pypi/zc.buildout#using-the-download-utility
+The recipe uses the zc.buildout
+`Download API <http://pypi.python.org/pypi/zc.buildout/1.5.2#using-the-download-utility>`_
+to perform the actual download which allows additional configuration of the
+download process. You can use the
+`download-cache <http://pypi.python.org/pypi/zc.buildout/1.5.2#using-a-download-cache>`_
+option to optionally cache downloaded files.
 
 
 Simple example
@@ -99,6 +95,7 @@ Simple example
     >>> import os.path
     >>> testdata = join(os.path.dirname(__file__), 'testdata')
     >>> server = start_server(testdata)
+    >>> mkdir(sample_buildout, 'downloads')
 
 In the simplest form we can download a simple package and have it
 extracted in the parts directory.
@@ -268,6 +265,7 @@ Rerunning the buildout now gives us
     >>> print system(buildout)
     Uninstalling package1.
     Installing package1.
+    Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /otherplace
 
 Taking a look at the extracted contents we can also see that the
@@ -310,6 +308,7 @@ directory in the destination.
     >>> print system(buildout)
     Uninstalling package1.
     Installing package1.
+    Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /existing
     package1: Target /existing/src already exists. Either remove it or set ``ignore-existing = true`` in your buildout.cfg to ignore existing files and directories.
     While:
@@ -341,6 +340,7 @@ proceed.
 
     >>> print system(buildout)
     Installing package1.
+    Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /existing
     package1: Ignoring existing target: /existing/src
 
@@ -372,6 +372,7 @@ destination.
     >>> print system(buildout)
     Uninstalling package1.
     Installing package1.
+    Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
 
 Now when we look into the directory containing the previous buildout
@@ -399,11 +400,13 @@ line.
 In the following example we will exclude the *CHANGES.txt* file and everything
 under and including the *src* directory.
 
+    >>> mkdir(sample_buildout, 'downloads')
     >>> write(sample_buildout, 'buildout.cfg',
     ... """
     ... [buildout]
     ... newest = false
     ... parts = package1
+    ... download-cache = downloads
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
@@ -419,6 +422,7 @@ Running the buildout will show how many files matched the configured excludes.
     >>> print system(buildout)
     Uninstalling package1.
     Installing package1.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Excluding 3 file(s) matching the exclusion pattern.
     package1: Extracting package to /sample-buildout/parts/package1
 
@@ -461,6 +465,7 @@ mode.
     ... newest = false
     ... parts = package1
     ... offline = true
+    ... download-cache = downloads
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
@@ -473,6 +478,7 @@ mode.
 Let's verify that we do have a cached copy in our downloads directory.
 
     >>> ls(sample_buildout, 'downloads')
+    d  dist
     -  package1-1.2.3-final.tar.gz
 
     >>> print system(buildout)

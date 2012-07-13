@@ -1,6 +1,21 @@
 Change History
 **************
 
+1.5.1 (xxxx-xx-xx)
+==================
+
+ - Ensure that the temporary extraction directory gets deleted even if an error
+   occurs later in the build. Previously it was possible for the temporary
+   directory to fill up without limit. See
+   https://github.com/hexagonit/hexagonit.recipe.download/pull/10 for details.
+   [desaintmartin]
+
+ - The download cache is no longer configured automatically because this could
+   result in buildout errors if the default download cache directory was not
+   created in time. See https://github.com/hexagonit/hexagonit.recipe.download/pull/9
+   for details.
+   [miano]
+
 1.5.0 (2011-01-26)
 ==================
 
@@ -46,10 +61,8 @@ Change History
  - Removed support for the deprecated ``download-directory``
    option. [dokai]
 
- - Refactored the download logic to use the `Download API`_ in
+ - Refactored the download logic to use the Download API in
    zc.buildout. We now require zc.buildout >= 1.4.0. [dokai]
-
-.. _`Download API`: http://pypi.python.org/pypi/zc.buildout#using-the-download-utility
 
 
 1.2.2 (2009-08-17)
