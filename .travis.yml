@@ -5,7 +5,7 @@ python:
   - 3.2
   - pypy
 install:
-  - python bootstrap.py
+  - python$TRAVIS_PYTHON_VERSION bootstrap.py -d
   - bin/buildout
 script:
   - ./bin/test -s hexagonit.recipe.download
