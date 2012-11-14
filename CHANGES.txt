@@ -1,8 +1,8 @@
 Change History
 **************
 
-1.5.2 (unreleased)
-==================
+1.6 (2012-11-14)
+================
 
  - py3k support
    [iElectric]
