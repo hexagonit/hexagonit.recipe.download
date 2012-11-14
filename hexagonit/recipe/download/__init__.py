@@ -1,13 +1,18 @@
 from fnmatch import fnmatch
 from zc.buildout.download import Download
 
+import sys
 import logging
 import os.path
 import setuptools.archive_util
 import shutil
 import tempfile
-import urlparse
 import zc.buildout
+
+if sys.version_info[0] > 2:
+    import urllib.parse as urlparse
+else:
+    import urlparse
 
 
 TRUE_VALUES = ('yes', 'true', '1', 'on')
