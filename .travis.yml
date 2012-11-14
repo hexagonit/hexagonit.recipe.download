@@ -5,6 +5,7 @@ python:
   - 3.2
 #  - pypy
 install:
+  - deactivate
   - python$TRAVIS_PYTHON_VERSION bootstrap.py -d
   - bin/buildout
 script:
