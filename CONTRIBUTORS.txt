@@ -5,3 +5,4 @@
  * Florian Schulze (fschulze)
  * Cédric de Saint Martin (desaintmartin)
  * miano
+ * Domen Kožar (iElectric)

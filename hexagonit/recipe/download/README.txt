@@ -113,7 +113,7 @@ extracted in the parts directory.
 
 Ok, let's run the buildout:
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Installing package1.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
@@ -169,7 +169,7 @@ accordingly.
 
 Ok, let's run the buildout:
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing sharedpackage.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
@@ -209,7 +209,7 @@ If the checksum fails we get an error.
     ... hash-name = false
     ... """ % server)
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling sharedpackage.
     Installing package1.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
@@ -232,7 +232,7 @@ Using a valid checksum allows the recipe to proceed.
     ... hash-name = false
     ... """ % server)
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Installing package1.
     Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
@@ -262,7 +262,7 @@ top level directory be stripped, which is often a useful feature.
 
 Rerunning the buildout now gives us
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     Downloading http://test.server//package1-1.2.3-final.tar.gz
@@ -305,7 +305,7 @@ in the package.
 Running the buildout now will fail because of the existing ``src``
 directory in the destination.
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     Downloading http://test.server//package1-1.2.3-final.tar.gz
@@ -338,7 +338,7 @@ proceed.
     ... hash-name = false
     ... """ % dict(server=server, dest=container))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Installing package1.
     Downloading http://test.server//package1-1.2.3-final.tar.gz
     package1: Extracting package to /existing
@@ -369,7 +369,7 @@ destination.
     ... hash-name = false
     ... """ % dict(server=server))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     Downloading http://test.server//package1-1.2.3-final.tar.gz
@@ -419,7 +419,7 @@ under and including the *src* directory.
 
 Running the buildout will show how many files matched the configured excludes.
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
@@ -430,7 +430,7 @@ Increasing the buildout verbosity with ``-vv`` will show the individual files
 that got excluded.
 
     >>> rmdir('parts', 'package1')
-    >>> print system(buildout + ' -vv')
+    >>> print(system(buildout + ' -vv'))
     Installing 'hexagonit.recipe.download'.
     ...
     Uninstalling package1.
@@ -481,7 +481,7 @@ Let's verify that we do have a cached copy in our downloads directory.
     d  dist
     -  package1-1.2.3-final.tar.gz
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     package1: Extracting package to /sample-buildout/parts/package1
@@ -503,7 +503,7 @@ When we remove the file from the filesystem the recipe will not work.
     ... hash-name = false
     ... """ % dict(server=server))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
     While:
@@ -535,7 +535,7 @@ directory.
     ... download-only = true
     ... """ % dict(server=server, dest=downloads, cache=cache))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Installing package.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
 
@@ -570,7 +570,7 @@ the ``filename`` parameter.
     ... filename = renamed-package-1.2.3.tgz
     ... """ % dict(server=server, dest=downloads, cache=cache))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package.
     Installing package.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
@@ -600,7 +600,7 @@ with the ``filename`` parameter to generate the resulting filename dynamically.
     ... filename = ${:_buildout_section_name_}-${buildout:example}.tgz
     ... """ % dict(server=server, dest=downloads, cache=cache))
 
-    >>> print system(buildout)
+    >>> print(system(buildout))
     Uninstalling package.
     Installing package.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
