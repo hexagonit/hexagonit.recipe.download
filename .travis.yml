@@ -6,7 +6,7 @@ python:
 #  - pypy
 install:
   - deactivate
-  - python$TRAVIS_PYTHON_VERSION bootstrap.py -d
+  - python$TRAVIS_PYTHON_VERSION bootstrap.py
   - ./bin/buildout
 script:
   - ./bin/test -s hexagonit.recipe.download
