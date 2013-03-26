@@ -610,3 +610,32 @@ section to demonstrate the dynamic naming.
 
     >>> ls(downloads)
     -  package-foobar-1.2.3.tgz
+
+
+Re-Running install on update
+============================
+Setting the ``on-update`` flag to ``true`` will re-run the install process on buildout update.
+
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... newest = false
+    ... parts = package
+    ...
+    ... [package]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... download-only = true
+    ... on-update = true
+    ... """ % dict(server=server, cache=cache))
+
+    >>> print(system(buildout))
+    Uninstalling package.
+    Installing package.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
+
+
+    >>> print(system(buildout))
+    Updating package.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz

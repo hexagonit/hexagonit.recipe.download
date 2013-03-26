@@ -35,6 +35,7 @@ class Recipe(object):
         options.setdefault('ignore-existing', 'false')
         options.setdefault('download-only', 'false')
         options.setdefault('hash-name', 'true')
+        options.setdefault('on-update', 'false')
         options['filename'] = options.get('filename', '').strip()
 
         # buildout -vv (or more) will trigger verbose mode
@@ -53,7 +54,8 @@ class Recipe(object):
         return dst
 
     def update(self):
-        pass
+        if self.options['on-update'].strip().lower() in TRUE_VALUES:
+            self.install()
 
     def calculate_base(self, extract_dir):
         """
