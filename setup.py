@@ -52,6 +52,6 @@ setup(name=name,
         'test': ['zope.testing'],
       },
       tests_require=['zope.testing'],
-      test_suite='%s.tests.test_suite' % name,
+      test_suite='hexagonit.recipe.download.tests.test_suite',
       entry_points={'zc.buildout': ['default = hexagonit.recipe.download:Recipe']},
       )

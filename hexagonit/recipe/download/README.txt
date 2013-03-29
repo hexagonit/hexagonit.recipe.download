@@ -430,7 +430,7 @@ that got excluded.
 
     >>> rmdir('parts', 'package1')
     >>> print(system(buildout + ' -vv'))
-    Installing 'hexagonit.recipe.download'.
+    <BLANKLINE>
     ...
     Uninstalling package1.
     ...
