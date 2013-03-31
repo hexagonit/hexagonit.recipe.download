@@ -11,5 +11,8 @@ additional features.
  * Github page: http://github.com/hexagonit/hexagonit.recipe.download
  * Clone URL: git://github.com/hexagonit/hexagonit.recipe.download.git
  * Issue tracker: http://github.com/hexagonit/hexagonit.recipe.download/issues
+ * Travis build: |travis|
+
+.. |travis| image:: https://api.travis-ci.org/hexagonit/hexagonit.recipe.download.png
 
 .. _gocept.download: http://pypi.python.org/pypi/gocept.download
