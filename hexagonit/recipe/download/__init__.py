@@ -38,6 +38,9 @@ class Recipe(object):
         options.setdefault('on-update', 'false')
         options['filename'] = options.get('filename', '').strip()
 
+        if options.get('mode'):
+          options['mode'] = options['mode'].strip()
+
         # buildout -vv (or more) will trigger verbose mode
         self.verbose = int(buildout['buildout'].get('verbosity', 0)) >= 20
         self.excludes = [x.strip() for x in options.get('excludes', '').strip().splitlines() if x.strip()]
@@ -103,6 +106,8 @@ class Recipe(object):
                 # Copy the file to destination without extraction
                 target_path = os.path.join(destination, filename)
                 shutil.copy(path, target_path)
+                if self.options.get('mode'):
+                  os.chmod(target_path, int(self.options['mode'], 8))
                 if not destination in parts:
                     parts.append(target_path)
             else:
