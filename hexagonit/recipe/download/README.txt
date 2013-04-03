@@ -609,8 +609,8 @@ systems, using octal mode only.
     Installing package.
     Downloading http://test.server/package1-1.2.3-final.tar.gz
 
-    >>> oct(os.stat(os.path.join(downloads, 'package1-1.2.3-final.tar.gz')).st_mode)
-    '0100654'
+    >>> oct(os.stat(os.path.join(downloads, 'package1-1.2.3-final.tar.gz')).st_mode)[-4:]
+    '0654'
 
 `Variable substitions
 <http://pypi.python.org/pypi/zc.buildout#variable-substitutions>`_ may be used
