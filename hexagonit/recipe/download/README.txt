@@ -120,8 +120,8 @@ extracted in the parts directory.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %spackage1-1.2.3-final.tar.gz
-    ... """ % server)
+    ... url = {server}package1-1.2.3-final.tar.gz
+    ... """.format(server=server))
 
 Ok, let's run the buildout:
 
@@ -171,12 +171,12 @@ accordingly.
     ... [buildout]
     ... newest = false
     ... parts = sharedpackage
-    ... download-cache = %(cache)s
+    ... download-cache = {cache}
     ...
     ... [sharedpackage]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
-    ... """ % dict(cache=cache, server=server))
+    ... url = {server}package1-1.2.3-final.tar.gz
+    ... """.format(cache=cache, server=server))
 
 Ok, let's run the buildout:
 
@@ -215,10 +215,10 @@ If the checksum fails we get an error.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = invalid
     ... hash-name = false
-    ... """ % server)
+    ... """.format(server=server))
 
     >>> print(system(buildout))
     Uninstalling sharedpackage.
@@ -238,14 +238,14 @@ Using a valid checksum allows the recipe to proceed.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... hash-name = false
-    ... """ % server)
+    ... """.format(server=server))
 
     >>> print(system(buildout))
     Installing package1.
-    Downloading http://test.server//package1-1.2.3-final.tar.gz
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
 
 
@@ -264,19 +264,19 @@ top level directory be stripped, which is often a useful feature.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... strip-top-level-dir = true
     ... hash-name = false
-    ... """ % dict(server=server, dest=tmpcontainer))
+    ... """.format(server=server, dest=tmpcontainer))
 
 Rerunning the buildout now gives us
 
     >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
-    Downloading http://test.server//package1-1.2.3-final.tar.gz
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /otherplace
 
 Taking a look at the extracted contents we can also see that the
@@ -306,12 +306,12 @@ in the package.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... strip-top-level-dir = true
     ... hash-name = false
-    ... """ % dict(server=server, dest=container))
+    ... """.format(server=server, dest=container))
 
 Running the buildout now will fail because of the existing ``src``
 directory in the destination.
@@ -319,7 +319,7 @@ directory in the destination.
     >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
-    Downloading http://test.server//package1-1.2.3-final.tar.gz
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /existing
     package1: Target /existing/src already exists. Either remove it or set ``ignore-existing = true`` in your buildout.cfg to ignore existing files and directories.
     While:
@@ -341,17 +341,17 @@ proceed.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... strip-top-level-dir = true
     ... ignore-existing = true
     ... hash-name = false
-    ... """ % dict(server=server, dest=container))
+    ... """.format(server=server, dest=container))
 
     >>> print(system(buildout))
     Installing package1.
-    Downloading http://test.server//package1-1.2.3-final.tar.gz
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /existing
     package1: Ignoring existing target: /existing/src
 
@@ -373,17 +373,17 @@ destination.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... strip-top-level-dir = true
     ... ignore-existing = true
     ... hash-name = false
-    ... """ % dict(server=server))
+    ... """.format(server=server))
 
     >>> print(system(buildout))
     Uninstalling package1.
     Installing package1.
-    Downloading http://test.server//package1-1.2.3-final.tar.gz
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
     package1: Extracting package to /sample-buildout/parts/package1
 
 Now when we look into the directory containing the previous buildout
@@ -421,12 +421,12 @@ under and including the *src* directory.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... hash-name = false
     ... excludes =
     ...     package1-*/CHANGES.txt
     ...     package1-*/src*
-    ... """ % server)
+    ... """.format(server=server))
 
 Running the buildout will show how many files matched the configured excludes.
 
@@ -480,11 +480,11 @@ mode.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)s/package1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... strip-top-level-dir = true
     ... hash-name = false
-    ... """ % dict(server=server))
+    ... """.format(server=server))
 
 Let's verify that we do have a cached copy in our downloads directory.
 
@@ -509,10 +509,10 @@ When we remove the file from the filesystem the recipe will not work.
     ...
     ... [package1]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... hash-name = false
-    ... """ % dict(server=server))
+    ... """.format(server=server))
 
     >>> print(system(buildout))
     Uninstalling package1.
@@ -536,15 +536,15 @@ directory.
     ... [buildout]
     ... newest = false
     ... parts = package
-    ... download-cache = %(cache)s
+    ... download-cache = {cache}
     ...
     ... [package]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... download-only = true
-    ... """ % dict(server=server, dest=downloads, cache=cache))
+    ... """.format(server=server, dest=downloads, cache=cache))
 
     >>> print(system(buildout))
     Installing package.
@@ -570,16 +570,16 @@ the ``filename`` parameter.
     ... [buildout]
     ... newest = false
     ... parts = package
-    ... download-cache = %(cache)s
+    ... download-cache = {cache}
     ...
     ... [package]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... download-only = true
     ... filename = renamed-package-1.2.3.tgz
-    ... """ % dict(server=server, dest=downloads, cache=cache))
+    ... """.format(server=server, dest=downloads, cache=cache))
 
     >>> print(system(buildout))
     Uninstalling package.
@@ -599,16 +599,16 @@ systems, using octal mode only.
     ... [buildout]
     ... newest = false
     ... parts = package
-    ... download-cache = %(cache)s
+    ... download-cache = {cache}
     ...
     ... [package]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
-    ... destination = %(dest)s
+    ... destination = {dest}
     ... download-only = true
     ... mode = 0654
-    ... """ % dict(server=server, dest=downloads, cache=cache))
+    ... """.format(server=server, dest=downloads, cache=cache))
 
     >>> print(system(buildout))
     Uninstalling package.
@@ -666,11 +666,11 @@ buildout update.
     ...
     ... [package]
     ... recipe = hexagonit.recipe.download
-    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... url = {server}package1-1.2.3-final.tar.gz
     ... md5sum = 821ecd681758d3fc03dcf76d3de00412
     ... download-only = true
     ... on-update = true
-    ... """ % dict(server=server, cache=cache))
+    ... """.format(server=server))
 
     >>> print(system(buildout))
     Uninstalling package.
