@@ -56,9 +56,9 @@ setup(
         'setuptools',
     ],
     extras_require={
-        'test': ['zope.testing'],
+        'test': ['zope.testing', 'manuel'],
     },
-    tests_require=['zope.testing'],
+    tests_require=['zope.testing', 'manuel'],
     test_suite='hexagonit.recipe.download.tests.test_suite',
     entry_points={'zc.buildout': ['default = hexagonit.recipe.download:Recipe']},
 )

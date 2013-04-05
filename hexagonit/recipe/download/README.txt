@@ -49,6 +49,12 @@ extract packages from the net. It supports the following options:
     files. The ``strip-top-level-dir`` option will be ignored if this
     option is enabled. Defaults to ``false``.
 
+``mode``
+
+    If ``download-only`` option is set, the recipe changes access permissions
+    of downloaded file to specified octal mode. Is ignored if the
+    ``download-only`` option is not set.
+
 ``filename``
 
     Allows renaming the downloaded file when using ``download-only = true``.
@@ -576,6 +582,35 @@ the ``filename`` parameter.
 
     >>> ls(downloads)
     -  renamed-package-1.2.3.tgz
+
+A mode can also be specified to set access permissions of the downloaded file.
+This is the equivalent of the ``chmod`` shell command in Unix-like operating
+systems, using octal mode only.
+
+    >>> empty_download_cache(cache)
+    >>> write(sample_buildout, 'buildout.cfg',
+    ... """
+    ... [buildout]
+    ... newest = false
+    ... parts = package
+    ... download-cache = %(cache)s
+    ...
+    ... [package]
+    ... recipe = hexagonit.recipe.download
+    ... url = %(server)spackage1-1.2.3-final.tar.gz
+    ... md5sum = 821ecd681758d3fc03dcf76d3de00412
+    ... destination = %(dest)s
+    ... download-only = true
+    ... mode = 0654
+    ... """ % dict(server=server, dest=downloads, cache=cache))
+
+    >>> print(system(buildout))
+    Uninstalling package.
+    Installing package.
+    Downloading http://test.server/package1-1.2.3-final.tar.gz
+
+    >>> oct(os.stat(os.path.join(downloads, 'package1-1.2.3-final.tar.gz')).st_mode)[-4:]
+    '0654'
 
 `Variable substitions
 <http://pypi.python.org/pypi/zc.buildout#variable-substitutions>`_ may be used
