@@ -51,9 +51,9 @@ extract packages from the net. It supports the following options:
 
 ``mode``
 
-    If ``download-only`` option is set, the recipe changes access permissions
-    of downloaded file to specified octal mode. Is ignored if the
-    ``download-only`` option is not set.
+    Sets the file mode on the downloaded file using the specified octal mode.
+    This option has effect only if ``download-only`` is set to ``true``.
+    New in version 1.7.0.
 
 ``filename``
 
@@ -86,6 +86,12 @@ extract packages from the net. It supports the following options:
       excludes =
         apache-solr-*/contrib/*
         apache-solr-*/docs/*
+
+``on-update``
+
+    When set to ``true``, the recipe will re-run itself when updated by the
+    buildout. Defaults to ``false``.
+    New in version 1.7.0.
 
 The recipe uses the zc.buildout
 `Download API <http://pypi.python.org/pypi/zc.buildout/1.5.2#using-the-download-utility>`_
@@ -646,9 +652,11 @@ section to demonstrate the dynamic naming.
     -  package-foobar-1.2.3.tgz
 
 
-Re-Running install on update
+Re-running install on update
 ============================
-Setting the ``on-update`` flag to ``true`` will re-run the install process on buildout update.
+
+Setting the ``on-update`` flag to ``true`` will re-run the install process on
+buildout update.
 
     >>> write(sample_buildout, 'buildout.cfg',
     ... """

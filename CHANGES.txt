@@ -5,7 +5,8 @@ Change History
 ================
 
 - New option, `mode`, to explicitly set the file mode of downloaded files when
-  `download-only` is set to `true`.
+  `download-only` is set to `true`. See
+  https://github.com/hexagonit/hexagonit.recipe.download/pull/18
   [desaintmartin]
 
 - Travis CI support, see https://travis-ci.org/hexagonit/hexagonit.recipe.download
@@ -17,7 +18,7 @@ Change History
 - zc.buildout 2.x support. Latest versions of both 1.x and 2.x are supported.
   [toumorokoshi]
 
-- New option, `on-update`, which makes the recipe rerun itself on updates
+- New option, `on-update`, which makes the recipe re-run itself on updates
   when set to `true`. Defaults to `false`. See
   https://github.com/hexagonit/hexagonit.recipe.download/pull/16
   [toumorokoshi]
