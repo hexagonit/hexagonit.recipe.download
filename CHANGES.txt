@@ -1,11 +1,34 @@
 Change History
 **************
 
+1.7 (xxxx-xx-xx)
+================
+
+- New option, `mode`, to explicitly set the file mode of downloaded files when
+  `download-only` is set to `true`.
+  [desaintmartin]
+
+- Travis CI support, see https://travis-ci.org/hexagonit/hexagonit.recipe.download
+  [dokai]
+
+- Tox support for running tests.
+  [dokai]
+
+- zc.buildout 2.x support. Latest versions of both 1.x and 2.x are supported.
+  [toumorokoshi]
+
+- New option, `on-update`, which makes the recipe rerun itself on updates
+  when set to `true`. Defaults to `false`. See
+  https://github.com/hexagonit/hexagonit.recipe.download/pull/16
+  [toumorokoshi]
+
+
 1.6 (2012-11-14)
 ================
 
  - py3k support
    [iElectric]
+
 
 1.5.1 (2012-07-13)
 ==================

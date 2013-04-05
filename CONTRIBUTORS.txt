@@ -6,3 +6,4 @@
  * Cédric de Saint Martin (desaintmartin)
  * miano
  * Domen Kožar (iElectric)
+ * Yusuke Tsutsumi (toumorokoshi)
