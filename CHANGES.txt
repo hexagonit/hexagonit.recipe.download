@@ -1,27 +1,27 @@
 Change History
 **************
 
-1.7 (xxxx-xx-xx)
+1.7 (2013-04-07)
 ================
 
-- New option, `mode`, to explicitly set the file mode of downloaded files when
-  `download-only` is set to `true`. See
-  https://github.com/hexagonit/hexagonit.recipe.download/pull/18
-  [desaintmartin]
+ - New option, `mode`, to explicitly set the file mode of downloaded files when
+   `download-only` is set to `true`. See
+   https://github.com/hexagonit/hexagonit.recipe.download/pull/18
+   [desaintmartin]
 
-- Travis CI support, see https://travis-ci.org/hexagonit/hexagonit.recipe.download
-  [dokai]
+ - Travis CI support, see https://travis-ci.org/hexagonit/hexagonit.recipe.download
+   [dokai]
 
-- Tox support for running tests.
-  [dokai]
+ - Tox support for running tests.
+   [dokai]
 
-- zc.buildout 2.x support. Latest versions of both 1.x and 2.x are supported.
-  [toumorokoshi]
+ - zc.buildout 2.x support. Latest versions of both 1.x and 2.x are supported.
+   [toumorokoshi]
 
-- New option, `on-update`, which makes the recipe re-run itself on updates
-  when set to `true`. Defaults to `false`. See
-  https://github.com/hexagonit/hexagonit.recipe.download/pull/16
-  [toumorokoshi]
+ - New option, `on-update`, which makes the recipe re-run itself on updates
+   when set to `true`. Defaults to `false`. See
+   https://github.com/hexagonit/hexagonit.recipe.download/pull/16
+   [toumorokoshi]
 
 
 1.6 (2012-11-14)
