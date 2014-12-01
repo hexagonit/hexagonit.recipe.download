@@ -136,6 +136,7 @@ class Recipe(object):
                         if os.path.exists(dest):
                             if ignore_existing:
                                 log.info('Ignoring existing target: %s' % dest)
+                                continue
                             else:
                                 log.error('Target %s already exists. Either remove it or set '
                                           '``ignore-existing = true`` in your buildout.cfg to ignore existing '
