@@ -1,3 +1,4 @@
+
 from setuptools import setup, find_packages
 import os
 
@@ -6,7 +7,8 @@ name = 'hexagonit.recipe.download'
 
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    path = os.path.join(os.path.dirname(__file__), *rnames)
+    return open(path, 'rb').read().decode('utf-8')
 
 setup(
     name=name,
