@@ -7,8 +7,10 @@ extract packages from the net. It supports the following options:
 ``url``
 
     URL to the package that will be downloaded and extracted. The
-    supported package formats are .tar.gz, .tar.bz2, and .zip. The
-    value must be a full URL,
+    supported package formats include ``.tar.gz``, ``.tar.bz2``, and ``.zip``.
+    (Anything that the stdlib ``zipfile`` and ``tarfile`` 
+    modules accept is OK; for example ``.war`` and ``.docx`` files.)
+    The value must be a full URL,
     e.g. http://python.org/ftp/python/2.4.4/Python-2.4.4.tgz.
 
 ``strip-top-level-dir``
