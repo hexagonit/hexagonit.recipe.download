@@ -1,6 +1,16 @@
 Change History
 **************
 
+1.7.1 (2016-02-12)
+==================
+
+- Do not copy source to target when ignore-existing is set #30
+  [mgrbyte]
+
+- Fix utf-8 error with Python 3.4 #32
+  [thefunny42]
+
+
 1.7 (2013-04-07)
 ================
 
