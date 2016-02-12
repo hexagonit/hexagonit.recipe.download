@@ -1,0 +1,7 @@
+include *.txt
+include README.rst
+include MANIFEST.in
+include tox.ini
+include bootstrap.py
+include buildout.cfg
+recursive-include hexagonit *
