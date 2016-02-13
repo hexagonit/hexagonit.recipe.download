@@ -13,7 +13,7 @@ additional features.
  * Issue tracker: http://github.com/hexagonit/hexagonit.recipe.download/issues
  * Travis build: |travis|
 
-Supported Python versions: 2.6, 2.7, 3.2, 3.3
+Supported Python versions: 2.6, 2.7, 3.2, 3.3, 3.4, 3.5
 
 Supported zc.buildout versions: 1.x, 2.x
 
