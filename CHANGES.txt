@@ -1,7 +1,7 @@
 Change History
 **************
 
-1.7.1 (2016-02-12)
+1.7.1 (2016-02-13)
 ==================
 
 - Do not copy source to target when ignore-existing is set #30
